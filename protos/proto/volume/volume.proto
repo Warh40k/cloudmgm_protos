@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+package volume;
+
+option go_package = "Warh40k.cloudmgm.volume.v1;volumev1";
+
+service Volumes {
+  rpc ListVolumes(google.protobuf.Empty) returns (VolumeList);
+  rpc GetVolume(VolumeRequest) returns (Volume);
+}
+
+message VolumeRequest {
+  int32 volumeId = 1;
+}
+
+message VolumeList {
+  repeated Volume volumes = 1;
+}
+
+message Volume {
+  int32 volumeId = 1;
+  string label = 2;
+  int32 storageId = 3;
+  string description = 4;
+}
