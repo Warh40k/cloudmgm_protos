@@ -10,13 +10,14 @@ service Auth {
 }
 
 message SignInRequest {
-  string login = 1;
+  string username = 1;
   string password = 2;
 }
 
 message SignUpRequest {
-  string login = 1;
-  string password = 2;
+  string name = 1;
+  string username = 2;
+  string password = 3;
 }
 
 message SignInResponse {
