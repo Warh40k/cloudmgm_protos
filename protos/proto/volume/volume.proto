@@ -12,7 +12,7 @@ service Volumes {
 }
 
 message VolumeRequest {
-  int32 volumeId = 1;
+  string volumeId = 1;
 }
 
 message VolumeList {
