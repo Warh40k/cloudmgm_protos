@@ -20,8 +20,8 @@ message VolumeList {
 }
 
 message Volume {
-  int32 volumeId = 1;
+  string volumeId = 1;
   string label = 2;
-  int32 storageId = 3;
+  string storageId = 3;
   string description = 4;
 }
