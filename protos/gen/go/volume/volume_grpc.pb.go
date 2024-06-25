@@ -25,6 +25,9 @@ const _ = grpc.SupportPackageIsVersion7
 type VolumesClient interface {
 	ListVolumes(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*VolumeList, error)
 	GetVolume(ctx context.Context, in *VolumeRequest, opts ...grpc.CallOption) (*Volume, error)
+	CreateVolume(ctx context.Context, in *Volume, opts ...grpc.CallOption) (*VolumeResponse, error)
+	DeleteVolume(ctx context.Context, in *VolumeRequest, opts ...grpc.CallOption) (*VolumeResponse, error)
+	UpdateVolume(ctx context.Context, in *Volume, opts ...grpc.CallOption) (*Volume, error)
 }
 
 type volumesClient struct {
@@ -53,12 +56,42 @@ func (c *volumesClient) GetVolume(ctx context.Context, in *VolumeRequest, opts .
 	return out, nil
 }
 
+func (c *volumesClient) CreateVolume(ctx context.Context, in *Volume, opts ...grpc.CallOption) (*VolumeResponse, error) {
+	out := new(VolumeResponse)
+	err := c.cc.Invoke(ctx, "/volume.Volumes/CreateVolume", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *volumesClient) DeleteVolume(ctx context.Context, in *VolumeRequest, opts ...grpc.CallOption) (*VolumeResponse, error) {
+	out := new(VolumeResponse)
+	err := c.cc.Invoke(ctx, "/volume.Volumes/DeleteVolume", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *volumesClient) UpdateVolume(ctx context.Context, in *Volume, opts ...grpc.CallOption) (*Volume, error) {
+	out := new(Volume)
+	err := c.cc.Invoke(ctx, "/volume.Volumes/UpdateVolume", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // VolumesServer is the server API for Volumes service.
 // All implementations must embed UnimplementedVolumesServer
 // for forward compatibility
 type VolumesServer interface {
 	ListVolumes(context.Context, *emptypb.Empty) (*VolumeList, error)
 	GetVolume(context.Context, *VolumeRequest) (*Volume, error)
+	CreateVolume(context.Context, *Volume) (*VolumeResponse, error)
+	DeleteVolume(context.Context, *VolumeRequest) (*VolumeResponse, error)
+	UpdateVolume(context.Context, *Volume) (*Volume, error)
 	mustEmbedUnimplementedVolumesServer()
 }
 
@@ -71,6 +104,15 @@ func (UnimplementedVolumesServer) ListVolumes(context.Context, *emptypb.Empty) (
 }
 func (UnimplementedVolumesServer) GetVolume(context.Context, *VolumeRequest) (*Volume, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetVolume not implemented")
+}
+func (UnimplementedVolumesServer) CreateVolume(context.Context, *Volume) (*VolumeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateVolume not implemented")
+}
+func (UnimplementedVolumesServer) DeleteVolume(context.Context, *VolumeRequest) (*VolumeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteVolume not implemented")
+}
+func (UnimplementedVolumesServer) UpdateVolume(context.Context, *Volume) (*Volume, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateVolume not implemented")
 }
 func (UnimplementedVolumesServer) mustEmbedUnimplementedVolumesServer() {}
 
@@ -121,6 +163,60 @@ func _Volumes_GetVolume_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Volumes_CreateVolume_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Volume)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(VolumesServer).CreateVolume(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/volume.Volumes/CreateVolume",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(VolumesServer).CreateVolume(ctx, req.(*Volume))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Volumes_DeleteVolume_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(VolumeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(VolumesServer).DeleteVolume(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/volume.Volumes/DeleteVolume",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(VolumesServer).DeleteVolume(ctx, req.(*VolumeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Volumes_UpdateVolume_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Volume)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(VolumesServer).UpdateVolume(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/volume.Volumes/UpdateVolume",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(VolumesServer).UpdateVolume(ctx, req.(*Volume))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Volumes_ServiceDesc is the grpc.ServiceDesc for Volumes service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -135,6 +231,18 @@ var Volumes_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetVolume",
 			Handler:    _Volumes_GetVolume_Handler,
+		},
+		{
+			MethodName: "CreateVolume",
+			Handler:    _Volumes_CreateVolume_Handler,
+		},
+		{
+			MethodName: "DeleteVolume",
+			Handler:    _Volumes_DeleteVolume_Handler,
+		},
+		{
+			MethodName: "UpdateVolume",
+			Handler:    _Volumes_UpdateVolume_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -9,6 +9,9 @@ option go_package = "Warh40k.cloudmgm.volume.v1;volumev1";
 service Volumes {
   rpc ListVolumes(google.protobuf.Empty) returns (VolumeList);
   rpc GetVolume(VolumeRequest) returns (Volume);
+  rpc CreateVolume(Volume) returns (VolumeResponse);
+  rpc DeleteVolume(VolumeRequest) returns (VolumeResponse);
+  rpc UpdateVolume(Volume) returns (Volume);
 }
 
 message VolumeRequest {
@@ -24,4 +27,8 @@ message Volume {
   string label = 2;
   string storageId = 3;
   string description = 4;
+}
+
+message VolumeResponse {
+  string volumeId = 1;
 }
