@@ -1,6 +1,7 @@
 syntax = "proto3";
 
 import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
 
 package volume;
 
@@ -27,6 +28,7 @@ message Volume {
   string label = 2;
   string storageId = 3;
   string description = 4;
+  google.protobuf.Timestamp created = 5;
 }
 
 message VolumeResponse {
